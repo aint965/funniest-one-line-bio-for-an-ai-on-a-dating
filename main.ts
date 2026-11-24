@@ -14,5 +14,14 @@ const BIO =
 
 const outDir = process.argv[2] ?? "/output";
 
+// The gate: /output/entry.txt must be UTF-8 text of 1 to 180 characters,
+// not only white space. Fail loudly here instead of shipping an invalid entry.
+if (BIO.trim().length === 0 || BIO.length > 180) {
+  console.error(
+    `error: bio must be 1-180 characters of non-whitespace text (got ${BIO.length} characters)`,
+  );
+  process.exit(1);
+}
+
 mkdirSync(outDir, { recursive: true });
 writeFileSync(join(outDir, "entry.txt"), BIO, "utf8");
